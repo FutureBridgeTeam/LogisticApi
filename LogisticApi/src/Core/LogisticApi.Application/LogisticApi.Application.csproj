@@ -15,4 +15,8 @@
     <Folder Include="ServiceRegistration\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LogisticApi.Domain\LogisticApi.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

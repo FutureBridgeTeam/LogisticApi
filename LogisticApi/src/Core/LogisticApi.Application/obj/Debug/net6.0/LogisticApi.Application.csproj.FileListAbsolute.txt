@@ -1,0 +1,15 @@
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\bin\Debug\net6.0\LogisticApi.Application.deps.json
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\bin\Debug\net6.0\LogisticApi.Application.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\bin\Debug\net6.0\LogisticApi.Application.pdb
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\bin\Debug\net6.0\LogisticApi.Domain.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\bin\Debug\net6.0\LogisticApi.Domain.pdb
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\LogisticApi.Application.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\LogisticApi.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\LogisticApi.Application.AssemblyInfoInputs.cache
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\LogisticApi.Application.AssemblyInfo.cs
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\LogisticApi.Application.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\LogisticApi.Application.csproj.CopyComplete
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\LogisticApi.Application.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\refint\LogisticApi.Application.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\LogisticApi.Application.pdb
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Core\LogisticApi.Application\obj\Debug\net6.0\ref\LogisticApi.Application.dll
