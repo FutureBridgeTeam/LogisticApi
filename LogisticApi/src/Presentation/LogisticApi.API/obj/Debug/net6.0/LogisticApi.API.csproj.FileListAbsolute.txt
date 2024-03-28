@@ -81,3 +81,10 @@ C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\b
 C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\LogisticApi.Infrastructure.pdb
 C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\LogisticApi.Persistance.pdb
 C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\LogisticApi.Domain.pdb
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\CloudinaryDotNet.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\FluentValidation.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\Newtonsoft.Json.dll

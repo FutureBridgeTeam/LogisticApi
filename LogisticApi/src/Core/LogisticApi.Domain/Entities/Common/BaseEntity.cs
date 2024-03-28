@@ -13,7 +13,11 @@ namespace LogisticApi.Domain.Entities.Common
         public string CreatedBy { get; set; } = null!;
         public DateTime? ModifiedAt { get; set; }
         public string? ModifiedBy { get; set; }
-        public bool IsDeleted { get; set; }
-
+        public bool? IsDeleted { get; set; }
+        public BaseEntity()
+        {
+            CreatedBy = "Ali.Keremov";
+            CreatedAt = DateTime.Now;
+        }
     }
 }

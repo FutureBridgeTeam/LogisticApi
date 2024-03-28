@@ -1,4 +1,5 @@
 ﻿using LogisticApi.Application.Abstraction.Services;
+using LogisticApi.Application.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,11 @@ namespace LogisticApi.API.Controllers
         public async Task<IActionResult> Get(int id)
         {
             return Ok(await _service.GetAsync(id));
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromForm]ServiceCreateDto createDto)
+        {      
+            return Ok(await _service.Create(createDto));
         }
     }
 }
