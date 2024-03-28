@@ -15,5 +15,6 @@ namespace LogisticApi.Application.DTOs
         public string Icon { get; set; } = null!;
         public IFormFile? Photo { get; set; }
         public string? Image { get; set; }
+
     }
 }

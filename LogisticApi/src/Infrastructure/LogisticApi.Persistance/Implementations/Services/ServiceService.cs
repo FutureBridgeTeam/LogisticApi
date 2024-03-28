@@ -3,6 +3,7 @@ using LogisticApi.Application.Abstraction.Repostories;
 using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Domain.Entities;
+using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,13 @@ namespace LogisticApi.Persistance.Implementations.Services
     {
         private readonly IServiceRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public ServiceService(IServiceRepository repository,IMapper mapper)
+        public ServiceService(IServiceRepository repository,IMapper mapper,ICloudinaryService cloudinaryService)
         {
             _repository = repository;
             _mapper = mapper;
+            _cloudinaryService = cloudinaryService;
         }
         public async Task<ICollection<ServiceItemDto>> GetAllAsync(int page, int take)
         {
@@ -33,10 +36,17 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (service == null) throw new Exception("Not Found((");
             return _mapper.Map<ServiceItemDto>(service);
         }
-        public Task Create(ServiceCreateDto categoryDto)
+        public async Task<string> Create(ServiceCreateDto categoryDto)
         {
-            throw new NotImplementedException();
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == categoryDto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
+            categoryDto.Image.ValidateImage();
+            Service service=_mapper.Map<Service>(categoryDto);
+            service.Image=await _cloudinaryService.FileCreateAsync(categoryDto.Image);
+            await _repository.AddAsync(service);
+            await _repository.SaveChangesAsync();
+            return new($"{service.Name}-service is successfully created");
         }
+
         public Task Update(ServiceUpdateDto categoryDto, int id)
         {
             throw new NotImplementedException();

@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\LogisticApi",
+    "\\LogisticApi\\src",
+    "\\LogisticApi\\src\\Infrastructure",
+    "\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance",
+    "\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\Contexts",
+    "\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\Implementations",
+    "\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\Implementations\\Repostories",
+    "\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\Implementations\\Repostories\\Generic"
+  ],
+  "SelectedNode": "\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\Implementations\\Repostories\\Generic\\Repository.cs",
+  "PreviewInSolutionExplorer": false
+}
