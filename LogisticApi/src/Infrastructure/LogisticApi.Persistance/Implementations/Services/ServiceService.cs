@@ -41,15 +41,27 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (await _repository.IsExistAsync(x => x.Name.ToUpper() == categoryDto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
             categoryDto.Image.ValidateImage();
             Service service=_mapper.Map<Service>(categoryDto);
+            service.IsDeleted = false;
             service.Image=await _cloudinaryService.FileCreateAsync(categoryDto.Image);
             await _repository.AddAsync(service);
             await _repository.SaveChangesAsync();
             return new($"{service.Name}-service is successfully created");
         }
 
-        public Task Update(ServiceUpdateDto categoryDto, int id)
+        public async Task<string> Update(ServiceUpdateDto dto, int id)
         {
-            throw new NotImplementedException();
+            Service existed= await _repository.GetByIdAsync(id, isDeleted:false);
+            if (existed == null) throw new Exception("Not Found((");
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
+            existed = _mapper.Map(dto, existed);
+            if(dto.Photo != null)
+            {
+                dto.Photo.ValidateImage();
+                existed.Image = await _cloudinaryService.FileCreateAsync(dto.Photo);
+            }
+            _repository.UpdateAsync(existed);
+            await _repository.SaveChangesAsync();
+            return new($"{existed.Name}-service is successfully updated");
         }
 
         public Task Delete(int id)

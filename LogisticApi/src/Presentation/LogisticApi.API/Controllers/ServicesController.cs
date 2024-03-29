@@ -30,5 +30,11 @@ namespace LogisticApi.API.Controllers
         {      
             return Ok(await _service.Create(createDto));
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromForm]ServiceUpdateDto updateDto, int id)
+        {
+            return Ok(await _service.Update(updateDto,id));
+        }
+
     }
 }
