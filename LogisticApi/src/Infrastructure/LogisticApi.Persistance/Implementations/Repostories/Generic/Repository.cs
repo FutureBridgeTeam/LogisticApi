@@ -25,7 +25,7 @@ namespace LogisticApi.Persistance.Implementations.Repostories.Generic
             await _dbSet.AddAsync(entity);
             await SaveChangesAsync();
         }
-        public async void DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
             await SaveChangesAsync();
@@ -40,7 +40,7 @@ namespace LogisticApi.Persistance.Implementations.Repostories.Generic
             entity.IsDeleted = false;
             _dbSet.Update(entity);
         }
-        public async void UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
             await SaveChangesAsync();
