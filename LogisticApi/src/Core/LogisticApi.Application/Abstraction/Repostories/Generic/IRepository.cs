@@ -25,8 +25,8 @@ namespace LogisticApi.Application.Abstraction.Repostories.Generic
                 bool QueryFilter = false, params string[] includes
             );
         Task AddAsync(T entity);
-        void DeleteAsync(T entity);
-        void UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
+        Task UpdateAsync(T entity);
         void SoftDelete(T entity);
         void Recovery(T entity);
         Task SaveChangesAsync();
