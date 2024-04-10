@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\LogisticApi.Application\LogisticApi.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\LogisticApi.Infrastructure\LogisticApi.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\LogisticApi.Persistance\LogisticApi.Persistance.csproj" />
