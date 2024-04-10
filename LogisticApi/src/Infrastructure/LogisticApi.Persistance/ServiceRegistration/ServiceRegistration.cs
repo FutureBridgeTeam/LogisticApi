@@ -34,8 +34,10 @@ namespace LogisticApi.Persistance.ServiceRegistration
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
             //Registrations of Repositories
             services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IToCountryRepository, ToCountryRepository>();
             //Registrations of Services
             services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<IToCountryService, ToCountryService>();
             return services;
         }
 

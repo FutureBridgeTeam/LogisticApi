@@ -8,9 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Abstraction\Repostories\Generic\" />
-    <Folder Include="Abstraction\Services\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="MappingProfile\" />
     <Folder Include="Validators\" />
     <Folder Include="ServiceRegistration\" />
   </ItemGroup>
