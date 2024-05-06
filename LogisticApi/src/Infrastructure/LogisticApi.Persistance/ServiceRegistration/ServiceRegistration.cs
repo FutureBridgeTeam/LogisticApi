@@ -33,11 +33,13 @@ namespace LogisticApi.Persistance.ServiceRegistration
                 opt.Lockout.AllowedForNewUsers = false;
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
             //Registrations of Repositories
-            services.AddScoped<IServiceRepository, ServiceRepository>();
-            services.AddScoped<IToCountryRepository, ToCountryRepository>();
+            services.AddScoped<IServiceRepository,ServiceRepository>();
+            services.AddScoped<IToCountryRepository,ToCountryRepository>();
+            services.AddScoped<IFromCountryRepository,FromCountryRepository>();
             //Registrations of Services
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IToCountryService, ToCountryService>();
+            services.AddScoped<IFromCountryService,FromCountryService>();
             return services;
         }
 
