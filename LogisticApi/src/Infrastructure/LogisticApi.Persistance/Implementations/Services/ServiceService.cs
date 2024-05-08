@@ -36,7 +36,7 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (service == null) throw new Exception("Not Found((");
             return _mapper.Map<ServiceItemDto>(service);
         }
-        public async Task<string> Create(ServiceCreateDto categoryDto)
+        public async Task Create(ServiceCreateDto categoryDto)
         {
             if (await _repository.IsExistAsync(x => x.Name.ToUpper() == categoryDto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
             categoryDto.Image.ValidateImage();
@@ -45,36 +45,47 @@ namespace LogisticApi.Persistance.Implementations.Services
             service.Image=await _cloudinaryService.FileCreateAsync(categoryDto.Image);
             await _repository.AddAsync(service);
             await _repository.SaveChangesAsync();
-            return new($"{service.Name}-service is successfully created");
+            
         }
 
-        public async Task<string> Update(ServiceUpdateDto dto, int id)
+        public async Task Update(ServiceUpdateDto dto, int id)
         {
             Service existed= await _repository.GetByIdAsync(id, isDeleted:false);
             if (existed == null) throw new Exception("Not Found((");
             if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
             existed = _mapper.Map(dto, existed);
+
             if(dto.Photo != null)
             {
+                var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
+                if (result == false) throw new Exception("File can't delete");
                 dto.Photo.ValidateImage();
                 existed.Image = await _cloudinaryService.FileCreateAsync(dto.Photo);
             }
-            _repository.UpdateAsync(existed);
-            await _repository.SaveChangesAsync();
-            return new($"{existed.Name}-service is successfully updated");
+            await _repository.UpdateAsync(existed);           
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            Service existed = await _repository.GetByIdAsync(id, isDeleted: false);
+            if (existed == null) throw new Exception("Not Found((");
+            var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
+            if (result == false) throw new Exception("File can't delete");
+            await _repository.DeleteAsync(existed);
         }
-        public Task ReverseDelete(int id)
+        public async Task ReverseDelete(int id)
         {
-            throw new NotImplementedException();
+            Service existed = await _repository.GetByIdAsync(id, isDeleted: true);
+            if (existed == null) throw new Exception("Not Found((");
+            _repository.Recovery(existed);
+            await _repository.SaveChangesAsync();
         }
-        public Task SoftDeleteAsync(int id)
+        public async Task SoftDeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            Service existed = await _repository.GetByIdAsync(id, isDeleted: false);
+            if (existed == null) throw new Exception("Not Found((");
+            _repository.SoftDelete(existed);
+            await _repository.SaveChangesAsync();
         }
 
     }
