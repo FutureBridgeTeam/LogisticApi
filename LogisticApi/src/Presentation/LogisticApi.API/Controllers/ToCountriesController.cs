@@ -53,7 +53,7 @@ namespace LogisticApi.API.Controllers
             await _service.SoftDeleteAsync(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
-        [HttpPatch("{id}")]
+        [HttpPatch("recovery/{id}")]
         public async Task<IActionResult> Recovery(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);

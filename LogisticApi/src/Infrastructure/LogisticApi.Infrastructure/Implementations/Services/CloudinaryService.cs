@@ -2,6 +2,7 @@
 using CloudinaryDotNet.Actions;
 using LogisticApi.Application.Abstraction.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -50,13 +51,12 @@ namespace LogisticApi.Infrastructure.Implementations.Services
 
             Cloudinary _cloudinary = new Cloudinary(myAccount);
             _cloudinary.Api.Secure = true;
-
-            var deletionParams = new DeletionParams(filename);
-
+            string publicId = filename.Substring(filename.LastIndexOf('/') + 1);
+            publicId = publicId.Substring(0, publicId.LastIndexOf('.'));
+            var deletionParams = new DeletionParams(publicId);
             var deletionResult = await _cloudinary.DestroyAsync(deletionParams);
-
-
-            return deletionResult.Result == "ok";
+            if (deletionResult.StatusCode == System.Net.HttpStatusCode.OK) return true;
+            return false;
         }
     }
 }
