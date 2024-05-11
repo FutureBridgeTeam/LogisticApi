@@ -36,10 +36,12 @@ namespace LogisticApi.Persistance.ServiceRegistration
             services.AddScoped<IServiceRepository,ServiceRepository>();
             services.AddScoped<IToCountryRepository,ToCountryRepository>();
             services.AddScoped<IFromCountryRepository,FromCountryRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             //Registrations of Services
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IToCountryService, ToCountryService>();
             services.AddScoped<IFromCountryService,FromCountryService>();
+            services.AddScoped<IOrderService, OrderService>();
             return services;
         }
 

@@ -53,7 +53,7 @@ namespace LogisticApi.Persistance.Implementations.Repostories.Generic
         {
             return await _dbSet.AnyAsync(expression);
         }
-        public IQueryable<T> GetAll(bool isTracking = false,bool? isDeleted=false, bool QueryFilter = false, params string[] includes)
+        public IQueryable<T> GetAll(bool isTracking = false, bool? isDeleted = false, bool QueryFilter = false, params string[] includes)
         {
             IQueryable<T> query = _dbSet;
             if (isDeleted == null) query = query.Where(x => x.IsDeleted == null);
@@ -65,7 +65,7 @@ namespace LogisticApi.Persistance.Implementations.Repostories.Generic
             return query;
         }
         public IQueryable<T> GetAllWhere(Expression<Func<T, bool>>? expression = null, Expression<Func<T, object>>? orderexpression = null,
-            bool? isDeleted = false,bool isDescending = false, bool isTracking = false, bool queryFilter = false, int skip = 0, int take = 0, params string[] includes)
+            bool? isDeleted = false, bool isDescending = false, bool isTracking = false, bool queryFilter = false, int skip = 0, int take = 0, params string[] includes)
         {
             IQueryable<T> query = _dbSet;
             if (expression != null) query = query.Where(expression);
@@ -102,6 +102,14 @@ namespace LogisticApi.Persistance.Implementations.Repostories.Generic
             if (isDeleted == null) query = query.Where(x => x.IsDeleted == null);
             else if (isDeleted == false) query = query.Where(x => x.IsDeleted == false);
             else if (isDeleted == true) query = query.Where(x => x.IsDeleted == true);
+            query = isTracking ? query : query.AsNoTracking();
+            query = QueryFilter ? query : query.IgnoreQueryFilters();
+            query = Includes(query, includes);
+            return await query.FirstOrDefaultAsync();
+        }
+        public async Task<T> GetByIdWithoutDeletedAsync(int id, bool isTracking = false, bool QueryFilter = false, params string[] includes)
+        {
+            IQueryable<T> query = _dbSet.Where(t => t.Id == id);
             query = isTracking ? query : query.AsNoTracking();
             query = QueryFilter ? query : query.IgnoreQueryFilters();
             query = Includes(query, includes);
