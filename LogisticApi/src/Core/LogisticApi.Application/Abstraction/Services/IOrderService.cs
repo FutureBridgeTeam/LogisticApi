@@ -11,6 +11,7 @@ namespace LogisticApi.Application.Abstraction.Services
     {
         Task<ICollection<OrderItemDto>> GetAllAsync(int page, int take, bool? isdeleted);
         Task<OrderItemDto> GetAsync(int id, bool? isdeleted);
+        Task<OrderItemDto> GetByTrackingId(string trackingId);
         Task CreateAsync(OrderCreateDto dto);
         Task SoftDeleteAsync(int id);
         Task ReverseDeleteAsync(int id);

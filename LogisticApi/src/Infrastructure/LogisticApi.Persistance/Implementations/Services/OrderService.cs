@@ -41,6 +41,12 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (order == null) throw new Exception("Not Found");
             return _mapper.Map<OrderItemDto>(order);
         }
+        public async Task<OrderItemDto> GetByTrackingId(string trackingId)
+        {
+            Order order = await _repository.GetByExpressionAsync(x=>x.TrackingId == trackingId);
+            if (order == null) throw new Exception("NotFound");
+            return _mapper.Map<OrderItemDto>(order);
+        }
         public async Task CreateAsync(OrderCreateDto dto)
         {
             Order order = _mapper.Map<Order>(dto);

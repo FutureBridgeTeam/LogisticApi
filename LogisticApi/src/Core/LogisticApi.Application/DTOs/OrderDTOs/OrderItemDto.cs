@@ -9,6 +9,7 @@ namespace LogisticApi.Application.DTOs.OrderDTOs
     public record OrderItemDto
     {
         public int Id { get; set; }
+        public string TrackingId { get; set; } = null!;
         public string CompanyName { get; set; } = null!;
         public string CompanyEmail { get; set; } = null!;
         public string CompanyPhone { get; set; } = null!;

@@ -27,6 +27,12 @@ namespace LogisticApi.API.Controllers
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
             return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id, isdeleted));
         }
+        [HttpGet("{trackingId}")]
+        public async Task<IActionResult> GetByTrackingId(string trackingId)
+        {
+            if (trackingId==null) return StatusCode(StatusCodes.Status400BadRequest);
+            return StatusCode(StatusCodes.Status200OK, await _service.GetByTrackingId(trackingId));
+        }
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] OrderCreateDto dto)
         {

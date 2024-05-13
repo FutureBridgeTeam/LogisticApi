@@ -24,6 +24,7 @@ namespace LogisticApi.Application.Abstraction.Repostories.Generic
                 Expression<Func<T, bool>> expression, bool? isDeleted = false, bool isTracking = false,
                 bool QueryFilter = false, params string[] includes
             );
+        Task<T> GetByIdWithoutDeletedAsync(int id, bool isTracking = false, bool QueryFilter = false, params string[] includes);
         Task AddAsync(T entity);
         Task DeleteAsync(T entity);
         Task UpdateAsync(T entity);
