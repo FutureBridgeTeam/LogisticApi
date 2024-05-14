@@ -21,14 +21,16 @@ namespace LogisticApi.Persistance.Implementations.Services
         private readonly IToCountryRepository _toCountryRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
-        public OrderService(IOrderRepository repository, IFromCountryRepository fromCountryRepository, IToCountryRepository toCountryRepository, IServiceRepository serviceRepository, IMapper mapper)
+        public OrderService(IOrderRepository repository, IFromCountryRepository fromCountryRepository, IToCountryRepository toCountryRepository, IServiceRepository serviceRepository, IMapper mapper,IEmailService emailService)
         {
             _repository = repository;
             _fromCountryRepository = fromCountryRepository;
             _toCountryRepository = toCountryRepository;
             _serviceRepository = serviceRepository;
             _mapper = mapper;
+            _emailService = emailService;
         }
         public async Task<ICollection<OrderItemDto>> GetAllAsync(int page, int take, bool? isdeleted)
         {
@@ -92,6 +94,8 @@ namespace LogisticApi.Persistance.Implementations.Services
             existed.TrackingId = GenerateId.GenerateTrackingId();
             _repository.Recovery(existed);
             await _repository.SaveChangesAsync();
+            string body = $"Your order has been successfully confirmed. \r\nTo track your order, use the tracking ID: {existed.TrackingId} \r\nThank you for choosing us.";
+            await _emailService.SendEmailAsync(existed.CompanyEmail,"Order request",body);
         }
     }
 }

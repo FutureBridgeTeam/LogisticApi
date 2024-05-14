@@ -42,6 +42,7 @@ namespace LogisticApi.Persistance.ServiceRegistration
             services.AddScoped<IToCountryService, ToCountryService>();
             services.AddScoped<IFromCountryService,FromCountryService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IAutenticationService, AutenticationService>();
             return services;
         }
 

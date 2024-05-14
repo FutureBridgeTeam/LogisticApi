@@ -14,6 +14,7 @@ namespace LogisticApi.Infrastructure.ServiceRegistration
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
             services.AddScoped<ICloudinaryService,CloudinaryService>(); 
+            services.AddScoped<IEmailService,EmailService>();
             return services;    
         }
     }
