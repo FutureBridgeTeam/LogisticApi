@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LogisticApi.Application.DTOs;
+using LogisticApi.Application.DTOs.AutenticationDTOs;
 using LogisticApi.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace LogisticApi.Application.MappingProfile
         public AppUserProfile()
         {
             CreateMap<RegisterDto, AppUser>();
+            CreateMap<LoginDto, AppUser>().ReverseMap();
         }
     }
 }

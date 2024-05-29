@@ -1,4 +1,6 @@
 ﻿using LogisticApi.Application.DTOs;
+using LogisticApi.Application.DTOs.AutenticationDTOs;
+using LogisticApi.Application.DTOs.TokenDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +12,6 @@ namespace LogisticApi.Application.Abstraction.Services
     public interface IAutenticationService
     {
         Task Register(RegisterDto registerDto);
+        Task<TokenResponseDto> Login(LoginDto loginDto);
     }
 }

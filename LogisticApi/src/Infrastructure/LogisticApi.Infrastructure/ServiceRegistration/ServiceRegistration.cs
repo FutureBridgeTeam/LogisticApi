@@ -15,6 +15,8 @@ namespace LogisticApi.Infrastructure.ServiceRegistration
         {
             services.AddScoped<ICloudinaryService,CloudinaryService>(); 
             services.AddScoped<IEmailService,EmailService>();
+            services.AddScoped<IJwtTokenService,JwtTokenService>();
+
             return services;    
         }
     }
