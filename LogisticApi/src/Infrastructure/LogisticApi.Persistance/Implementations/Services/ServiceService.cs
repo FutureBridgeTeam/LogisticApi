@@ -52,7 +52,10 @@ namespace LogisticApi.Persistance.Implementations.Services
         {
             Service existed= await _repository.GetByIdAsync(id, isDeleted:false);
             if (existed == null) throw new Exception("Not Found((");
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
+            if (existed.Name != dto.Name)
+            {
+                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
+            }
             existed = _mapper.Map(dto, existed);
 
             if(dto.Photo != null)

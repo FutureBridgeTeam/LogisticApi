@@ -20,15 +20,17 @@ namespace LogisticApi.Persistance.Implementations.Services
         private readonly IFromCountryRepository _fromCountryRepository;
         private readonly IToCountryRepository _toCountryRepository;
         private readonly IServiceRepository _serviceRepository;
+        private readonly IAutenticationService _autenticationService;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
 
-        public OrderService(IOrderRepository repository, IFromCountryRepository fromCountryRepository, IToCountryRepository toCountryRepository, IServiceRepository serviceRepository, IMapper mapper,IEmailService emailService)
+        public OrderService(IOrderRepository repository, IFromCountryRepository fromCountryRepository, IToCountryRepository toCountryRepository, IServiceRepository serviceRepository,IAutenticationService autenticationService, IMapper mapper,IEmailService emailService)
         {
             _repository = repository;
             _fromCountryRepository = fromCountryRepository;
             _toCountryRepository = toCountryRepository;
             _serviceRepository = serviceRepository;
+            _autenticationService = autenticationService;
             _mapper = mapper;
             _emailService = emailService;
         }
@@ -63,6 +65,11 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (dto.ServiceId != null)
             {
                 if (!await _serviceRepository.IsExistAsync(x => x.Id == dto.ServiceId)) throw new Exception("Service not found");
+            }
+            if (_autenticationService.IsUserCurrent())
+            {
+                var user=await _autenticationService.GetCurrentUserAsync();
+                order.AppUserId = user.Id;
             }
             order.IsDeleted = null;
             await _repository.AddAsync(order);

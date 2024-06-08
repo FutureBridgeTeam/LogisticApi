@@ -13,5 +13,8 @@ namespace LogisticApi.Application.Abstraction.Services
     {
         Task Register(RegisterDto registerDto);
         Task<TokenResponseDto> Login(LoginDto loginDto);
+        bool IsUserCurrent();
+        Task<AppUserGetDto> GetCurrentUserAsync();
+        Task<string> GetUserRoleAsync(string id);
     }
 }
