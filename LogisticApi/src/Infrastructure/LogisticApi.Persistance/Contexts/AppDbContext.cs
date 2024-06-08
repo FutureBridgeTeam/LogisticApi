@@ -16,6 +16,8 @@ namespace LogisticApi.Persistance.Contexts
         {
         }
         public DbSet<Service> Services { get; set; }
+        public DbSet<Faq> Faqs { get; set; }
+        public DbSet<PartnerCompany> PartnerCompanies { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<ToCountry> ToCountries { get; set; }
         public DbSet<FromCountry> FromCountries { get; set; }

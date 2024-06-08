@@ -16,6 +16,7 @@ namespace LogisticApi.Application.MappingProfile
         {
             CreateMap<RegisterDto, AppUser>();
             CreateMap<LoginDto, AppUser>().ReverseMap();
+            CreateMap<AppUserGetDto, AppUser>().ReverseMap();
         }
     }
 }
