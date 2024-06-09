@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = LogisticApi.Infrastructure
-build_property.ProjectDir = C:\Users\User\Desktop\LogisticApi\LogisticApi\src\Infrastructure\LogisticApi.Infrastructure\
+build_property.ProjectDir = C:\Users\User\Desktop\Project\LogisticApi\LogisticApi\src\Infrastructure\LogisticApi.Infrastructure\

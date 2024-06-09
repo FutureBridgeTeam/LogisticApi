@@ -24,9 +24,8 @@ namespace LogisticApi.API.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
-        {
-            await _service.Login(loginDto);
-            return StatusCode(StatusCodes.Status200OK);
+        {         
+            return StatusCode(StatusCodes.Status200OK, await _service.Login(loginDto));
         }
     }
 }

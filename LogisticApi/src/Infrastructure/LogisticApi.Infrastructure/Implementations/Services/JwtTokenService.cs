@@ -37,7 +37,7 @@ namespace LogisticApi.Infrastructure.Implementations.Services
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Audience"],
+                audience: _configuration["Jwt:Audience"],
                 notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddMinutes(minutes),
                 claims: userclaims,
