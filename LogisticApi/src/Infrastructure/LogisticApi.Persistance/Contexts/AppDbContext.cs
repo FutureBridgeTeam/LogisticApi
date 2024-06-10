@@ -21,6 +21,7 @@ namespace LogisticApi.Persistance.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<ToCountry> ToCountries { get; set; }
         public DbSet<FromCountry> FromCountries { get; set; }
+        public DbSet<CustomInfo> CustomInfos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
