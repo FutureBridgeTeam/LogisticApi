@@ -16,5 +16,6 @@ namespace LogisticApi.Application.Abstraction.Services
         bool IsUserCurrent();
         Task<AppUserGetDto> GetCurrentUserAsync();
         Task<string> GetUserRoleAsync(string id);
+        Task CreateRoleAsync();
     }
 }
