@@ -4,6 +4,7 @@ using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.AutenticationDTOs;
 using LogisticApi.Application.DTOs.TokenDTOs;
 using LogisticApi.Domain.Entities;
+using LogisticApi.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,14 +24,15 @@ namespace LogisticApi.Persistance.Implementations.Services
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IHttpContextAccessor _accessor;
-
-        public AutenticationService(UserManager<AppUser> userManager, IMapper mapper, ICloudinaryService cloudinaryService, IJwtTokenService jwtTokenService,IHttpContextAccessor accessor)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public AutenticationService(UserManager<AppUser> userManager, IMapper mapper, ICloudinaryService cloudinaryService, IJwtTokenService jwtTokenService, IHttpContextAccessor accessor, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _mapper = mapper;
             _cloudinaryService = cloudinaryService;
             _jwtTokenService = jwtTokenService;
             _accessor = accessor;
+            _roleManager = roleManager;
         }
         public async Task Register(RegisterDto registerDto)
         {
@@ -50,6 +52,7 @@ namespace LogisticApi.Persistance.Implementations.Services
                 }
                 throw new Exception(builder.ToString());
             }
+            await _userManager.AddToRoleAsync(user, Roles.User.ToString());
         }
         public async Task<TokenResponseDto> Login(LoginDto loginDto)
         {
@@ -78,23 +81,35 @@ namespace LogisticApi.Persistance.Implementations.Services
                 throw new Exception("User not Found");
 
             var dto = _mapper.Map<AppUserGetDto>(user);
-            
+
             dto.Role = await GetUserRoleAsync(dto.Id);
 
             return dto;
         }
         public async Task<string> GetUserRoleAsync(string id)
         {
-            var user= await _getUserById(id);
+            var user = await _getUserById(id);
             var roles = await _userManager.GetRolesAsync(user);
             if (roles.FirstOrDefault() is null) return "";
             return roles.FirstOrDefault();
         }
+
+        public async Task CreateRoleAsync()
+        {
+            foreach (var item in Enum.GetValues(typeof(Roles)))
+            {
+                if (!await _roleManager.RoleExistsAsync(item.ToString()))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole { Name = item.ToString() });
+                };
+            }
+        }
         private async Task<AppUser> _getUserById(string id)
         {
-            var user =await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user is null) throw new Exception("User not found(");
             return user;
         }
+
     }
 }

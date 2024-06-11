@@ -27,5 +27,11 @@ namespace LogisticApi.API.Controllers
         {         
             return StatusCode(StatusCodes.Status200OK, await _service.Login(loginDto));
         }
+        [HttpGet]
+        public async Task<IActionResult> CreateRole()
+        {
+            await _service.CreateRoleAsync();
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
     }
 }
