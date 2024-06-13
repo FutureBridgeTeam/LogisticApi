@@ -1,6 +1,10 @@
 using LogisticApi.Application.ServiceRegistration;
+using LogisticApi.Domain.Entities;
 using LogisticApi.Infrastructure.ServiceRegistration;
 using LogisticApi.Persistance.ServiceRegistration;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
