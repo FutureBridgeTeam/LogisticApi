@@ -17,5 +17,7 @@ namespace LogisticApi.Application.Abstraction.Services
         Task<AppUserGetDto> GetCurrentUserAsync();
         Task<string> GetUserRoleAsync(string id);
         Task CreateRoleAsync();
+        Task<string> ForgotPasswordAsync(string email);
+        Task ResetPassword(ResetPasswordDto dto, string token);
     }
 }

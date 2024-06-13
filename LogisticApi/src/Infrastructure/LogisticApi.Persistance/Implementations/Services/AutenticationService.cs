@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using CloudinaryDotNet;
 using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.AutenticationDTOs;
 using LogisticApi.Application.DTOs.TokenDTOs;
 using LogisticApi.Domain.Entities;
 using LogisticApi.Domain.Enums;
+using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,7 +28,12 @@ namespace LogisticApi.Persistance.Implementations.Services
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IHttpContextAccessor _accessor;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AutenticationService(UserManager<AppUser> userManager, IMapper mapper, ICloudinaryService cloudinaryService, IJwtTokenService jwtTokenService, IHttpContextAccessor accessor, RoleManager<IdentityRole> roleManager)
+        private readonly IEmailService _emailService;
+        private readonly IUrlHelper _urlHelper;
+
+        public AutenticationService(UserManager<AppUser> userManager, IMapper mapper,
+           ICloudinaryService cloudinaryService, IJwtTokenService jwtTokenService, IHttpContextAccessor accessor,
+           RoleManager<IdentityRole> roleManager, IEmailService emailService, IUrlHelper urlHelper)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -33,6 +41,8 @@ namespace LogisticApi.Persistance.Implementations.Services
             _jwtTokenService = jwtTokenService;
             _accessor = accessor;
             _roleManager = roleManager;
+            _emailService = emailService;
+            _urlHelper = urlHelper;
         }
         public async Task Register(RegisterDto registerDto)
         {
@@ -102,6 +112,31 @@ namespace LogisticApi.Persistance.Implementations.Services
                 {
                     await _roleManager.CreateAsync(new IdentityRole { Name = item.ToString() });
                 };
+            }
+        }
+        public async Task<string> ForgotPasswordAsync(string email)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(email);
+            if (user == null) throw new Exception("User not found");
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            return token;
+        }
+        public async Task ResetPassword(ResetPasswordDto dto, string token)
+        {
+            var userid = _accessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier); // Bu hisse deyisdirilecek //
+            if (userid == null) throw new Exception("Userid not found");
+            var user = await _userManager.FindByIdAsync(userid);
+            if (user == null) throw new Exception("User not found");
+            if (await _userManager.CheckPasswordAsync(user, dto.Password)) throw new Exception("The new password cannot be the same as the old one.");
+            var result = await _userManager.ResetPasswordAsync(user, token, dto.Password);
+            if (!result.Succeeded)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (var item in result.Errors)
+                {
+                    sb.AppendLine(item.Description);
+                }
+                throw new Exception(sb.ToString());
             }
         }
         private async Task<AppUser> _getUserById(string id)

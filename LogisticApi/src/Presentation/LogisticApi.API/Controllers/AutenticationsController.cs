@@ -33,5 +33,16 @@ namespace LogisticApi.API.Controllers
             await _service.CreateRoleAsync();
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword([FromForm] string email )
+        {         
+            return StatusCode(StatusCodes.Status200OK, await _service.ForgotPasswordAsync(email));
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordDto dto,string token)
+        {
+            await _service.ResetPassword(dto,token);
+            return StatusCode(StatusCodes.Status200OK);
+        }
     }
 }
