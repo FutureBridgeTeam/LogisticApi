@@ -48,6 +48,8 @@ namespace LogisticApi.Persistance.ServiceRegistration
             services.AddScoped<IFaqRepository, FaqRepository>();
             services.AddScoped<IPartnerCompanyRepository, PartnerCompanyRepository>();
             services.AddScoped<ICustomInfoRepository, CustomInfoRepository>();
+            services.AddScoped<IAboutRepository, AboutRepository>();
+            services.AddScoped<ISettingRepository, SettingRepository>();
             //Registrations of Services
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IToCountryService, ToCountryService>();
@@ -57,6 +59,8 @@ namespace LogisticApi.Persistance.ServiceRegistration
             services.AddScoped<IPartnerCompanyService, PartnerCompanyService>();
             services.AddScoped<IAutenticationService, AutenticationService>();
             services.AddScoped<ICustomInfoService, CustomInfoService>();
+            services.AddScoped<ISettingService, SettingService>();
+            services.AddScoped<IAboutService, AboutService>();
             return services;
         }
 

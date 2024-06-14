@@ -17,15 +17,15 @@ namespace LogisticApi.API.Controllers
             _service = service;
         }
         [HttpGet]
-        public async Task<IActionResult> Get(int page=1, int take=3)
+        public async Task<IActionResult> Get(bool isdeleted,int page=1, int take=3)
         {
-            return StatusCode(StatusCodes.Status200OK, await _service.GetAllAsync(page, take));
+            return StatusCode(StatusCodes.Status200OK, await _service.GetAllAsync(page, take,isdeleted));
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id, bool isdeleted)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
-            return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id));
+            return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id,isdeleted));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] FromCountryCreateDto dto)

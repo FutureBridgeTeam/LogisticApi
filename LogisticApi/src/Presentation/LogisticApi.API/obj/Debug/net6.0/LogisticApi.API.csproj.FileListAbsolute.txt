@@ -179,3 +179,4 @@ C:\Users\User\Desktop\Project\LogisticApi\LogisticApi\src\Presentation\LogisticA
 C:\Users\User\Desktop\Project\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\obj\Debug\net6.0\LogisticApi.API.pdb
 C:\Users\User\Desktop\Project\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\obj\Debug\net6.0\LogisticApi.API.genruntimeconfig.cache
 C:\Users\User\Desktop\Project\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\obj\Debug\net6.0\ref\LogisticApi.API.dll
+C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

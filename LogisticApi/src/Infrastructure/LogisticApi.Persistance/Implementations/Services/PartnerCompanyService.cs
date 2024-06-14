@@ -60,12 +60,12 @@ namespace LogisticApi.Persistance.Implementations.Services
             }
             existed = _mapper.Map(partnerdto, existed);
 
-            if (partnerdto.Photo != null)
+            if (partnerdto.NewImage != null)
             {
+                partnerdto.NewImage.ValidateImage();
                 var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
                 if (result == false) throw new Exception("File can't delete");
-                partnerdto.Photo.ValidateImage();
-                existed.Image = await _cloudinaryService.FileCreateAsync(partnerdto.Photo);
+                existed.Image = await _cloudinaryService.FileCreateAsync(partnerdto.NewImage);
             }
             await _repository.UpdateAsync(existed);
         }
