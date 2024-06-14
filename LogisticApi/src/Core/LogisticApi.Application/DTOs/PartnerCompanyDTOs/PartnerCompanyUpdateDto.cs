@@ -12,8 +12,8 @@ namespace LogisticApi.Application.DTOs.PartnerCompanyDTOs
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string WebsiteLink { get; set; } = null!;
-        public string? Image { get; set; } 
-        public IFormFile? Photo { get; set; }
+        public string? ExistImage { get; set; } 
+        public IFormFile? NewImage { get; set; }
 
     }
 }

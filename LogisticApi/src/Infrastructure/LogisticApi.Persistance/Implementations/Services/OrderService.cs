@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using CloudinaryDotNet.Actions;
 using LogisticApi.Application.Abstraction.Repostories;
 using LogisticApi.Application.Abstraction.Services;
+using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.OrderDTOs;
 using LogisticApi.Domain.Entities;
 using LogisticApi.Domain.Enums;
@@ -8,6 +10,7 @@ using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +40,20 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task<ICollection<OrderItemDto>> GetAllAsync(int page, int take, bool? isdeleted)
         {
             ICollection<Order> orders = await _repository.GetAllWhere(isDeleted: isdeleted, skip: (page - 1) * take, take: take).ToListAsync();
+            return _mapper.Map<ICollection<OrderItemDto>>(orders);
+        }
+        public async Task<ICollection<OrderItemDto>> GetAllByCurrentlyUser(int page, int take,OrderStatus? orderStatus)
+        {
+            var user = await _autenticationService.GetCurrentUserAsync();
+            ICollection < Order > orders= new List<Order>();
+            if (orderStatus == null)
+            {
+                orders = await _repository.GetAllWhere(x=>x.AppUserId==user.Id,orderexpression:x=>x.Id,isDescending:true,isDeleted: false, skip: (page - 1) * take, take: take).ToListAsync();
+            }
+            else
+            {
+               orders = await _repository.GetAllWhere(x => x.AppUserId == user.Id && x.Status==orderStatus, orderexpression: x => x.Id, isDescending: true, isDeleted: false, skip: (page - 1) * take, take: take).ToListAsync();
+            }
             return _mapper.Map<ICollection<OrderItemDto>>(orders);
         }
         public async Task<OrderItemDto> GetAsync(int id, bool? isdeleted)
@@ -74,6 +91,13 @@ namespace LogisticApi.Persistance.Implementations.Services
             order.IsDeleted = null;
             await _repository.AddAsync(order);
         }
+        public async Task ChangeOrderStatus(int id,OrderChangeStatusDto changeStatusDto)
+        {
+            Order existed=await _repository.GetByIdAsync(id,isDeleted:false);
+            if (existed == null) throw new Exception("Order not found");
+            existed.Status=changeStatusDto.Status;
+            await _repository.UpdateAsync(existed);
+        }
         public async Task DeleteAsync(int id)
         {
             Order existed = await _repository.GetByIdWithoutDeletedAsync(id);
@@ -99,6 +123,7 @@ namespace LogisticApi.Persistance.Implementations.Services
             Order existed = await _repository.GetByIdAsync(id, isDeleted: null);
             if (existed == null) throw new Exception("Not Found");
             existed.TrackingId = GenerateId.GenerateTrackingId();
+            existed.Status = OrderStatus.GettingReady;
             _repository.Recovery(existed);
             await _repository.SaveChangesAsync();
             string body = $"Your order has been successfully confirmed. \r\nTo track your order, use the tracking ID: {existed.TrackingId} \r\nThank you for choosing us.";

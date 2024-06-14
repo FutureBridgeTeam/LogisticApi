@@ -18,8 +18,6 @@ namespace LogisticApi.Application.Validators.PartnerCompanyValidators
             RuleFor(x => x.WebsiteLink)
                 .NotEmpty().WithMessage("You can't send empty value")
                 .MaximumLength(200).WithMessage("You must send max 200 caracter");
-            RuleFor(x => x.Image)
-                .NotEmpty().WithMessage("You can't send empty value");
             RuleFor(x => x.Description)
                 .NotEmpty().WithMessage("You can't send empty value")
                 .MaximumLength(2000).WithMessage("Description must be contain maximum 2000 caracter");

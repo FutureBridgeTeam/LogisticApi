@@ -1,6 +1,7 @@
 ﻿using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.OrderDTOs;
+using LogisticApi.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,11 @@ namespace LogisticApi.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private readonly IOrderService _service;
 
-        public OrderController(IOrderService service)
+        public OrdersController(IOrderService service)
         {
             _service = service;
         }
@@ -20,6 +21,11 @@ namespace LogisticApi.API.Controllers
         public async Task<IActionResult> Get(bool? isdeleted,int  page = 1, int take = 3)
         {
             return StatusCode(StatusCodes.Status200OK, await _service.GetAllAsync(page, take,isdeleted));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllByCurrentlyUser(OrderStatus? orderStatus, int page = 1, int take = 3)
+        {
+            return StatusCode(StatusCodes.Status200OK, await _service.GetAllByCurrentlyUser(page, take,orderStatus));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id, bool? isdeleted)
@@ -39,6 +45,14 @@ namespace LogisticApi.API.Controllers
             await _service.CreateAsync(dto);
             return StatusCode(StatusCodes.Status201Created);
         }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> ChangeOrderStatus(int id, [FromForm]OrderChangeStatusDto dto)
+        {
+            if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
+            await _service.ChangeOrderStatus(id, dto);
+            return StatusCode(StatusCodes.Status200OK);
+        } 
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

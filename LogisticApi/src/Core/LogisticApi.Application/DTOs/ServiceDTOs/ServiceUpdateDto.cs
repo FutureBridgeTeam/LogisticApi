@@ -13,8 +13,8 @@ namespace LogisticApi.Application.DTOs
         public string Tittle { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string Icon { get; set; } = null!;
-        public IFormFile? Photo { get; set; }
-        public string? Image { get; set; }
+        public string? ExistImage { get; set; }
+        public IFormFile? NewImage { get; set; }
 
     }
 }

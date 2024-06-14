@@ -5629,23 +5629,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {},
+    "C:\\Users\\user\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\Project\\LogisticApi\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\LogisticApi.Persistance.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Desktop\\LogisticApi\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\LogisticApi.Persistance.csproj",
       "projectName": "LogisticApi.Persistance",
-      "projectPath": "C:\\Users\\User\\Desktop\\Project\\LogisticApi\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\LogisticApi.Persistance.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\Project\\LogisticApi\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\obj\\",
+      "projectPath": "C:\\Users\\user\\Desktop\\LogisticApi\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\LogisticApi.Persistance.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\user\\Desktop\\LogisticApi\\LogisticApi\\src\\Infrastructure\\LogisticApi.Persistance\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5660,8 +5660,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\User\\Desktop\\Project\\LogisticApi\\LogisticApi\\src\\Core\\LogisticApi.Application\\LogisticApi.Application.csproj": {
-              "projectPath": "C:\\Users\\User\\Desktop\\Project\\LogisticApi\\LogisticApi\\src\\Core\\LogisticApi.Application\\LogisticApi.Application.csproj"
+            "C:\\Users\\user\\Desktop\\LogisticApi\\LogisticApi\\src\\Core\\LogisticApi.Application\\LogisticApi.Application.csproj": {
+              "projectPath": "C:\\Users\\user\\Desktop\\LogisticApi\\LogisticApi\\src\\Core\\LogisticApi.Application\\LogisticApi.Application.csproj"
             }
           }
         }
@@ -5711,7 +5711,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }
