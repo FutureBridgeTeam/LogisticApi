@@ -24,6 +24,7 @@ namespace LogisticApi.Persistance.Contexts
         public DbSet<CustomInfo> CustomInfos { get; set; }
         public DbSet<About> Abouts { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<Slider> Sliders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
