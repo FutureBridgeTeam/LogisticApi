@@ -52,7 +52,9 @@ namespace LogisticApi.Persistance.Implementations.Services
             }
             else
             {
-               orders = await _repository.GetAllWhere(x => x.AppUserId == user.Id && x.Status==orderStatus, orderexpression: x => x.Id, isDescending: true, isDeleted: false, skip: (page - 1) * take, take: take).ToListAsync();
+                bool isvalid = Enum.IsDefined(typeof(OrderStatus), orderStatus);
+                if (!isvalid) throw new Exception("Invalid order status");
+                orders = await _repository.GetAllWhere(x => x.AppUserId == user.Id && x.Status==orderStatus, orderexpression: x => x.Id, isDescending: true, isDeleted: false, skip: (page - 1) * take, take: take).ToListAsync();
             }
             return _mapper.Map<ICollection<OrderItemDto>>(orders);
         }
@@ -95,6 +97,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         {
             Order existed=await _repository.GetByIdAsync(id,isDeleted:false);
             if (existed == null) throw new Exception("Order not found");
+            bool isvalid = Enum.IsDefined(typeof(OrderStatus), changeStatusDto.Status);
+            if (!isvalid) throw new Exception("Invalid order status");
             existed.Status=changeStatusDto.Status;
             await _repository.UpdateAsync(existed);
         }
