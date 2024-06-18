@@ -1,12 +1,13 @@
 ﻿using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticApi.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class FromCountriesController : ControllerBase
     {
@@ -28,12 +29,14 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id,isdeleted));
         }
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Create([FromForm] FromCountryCreateDto dto)
         {
             await _service.CreateAsync(dto);
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPut("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Update(int id, FromCountryUpdateDto dto)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -41,6 +44,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -48,6 +52,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -55,6 +60,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPatch("recovery/{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Recovery(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);

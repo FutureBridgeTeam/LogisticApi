@@ -21,7 +21,7 @@ namespace LogisticApi.Infrastructure.Implementations.Services
         {
             _configuration = configuration;
         }
-        public TokenResponseDto CreateJwtToken(AppUser user, int minutes)
+        public TokenResponseDto CreateJwtToken(AppUser user, int minutes, List<string> roles)
         {
             ICollection<Claim> userclaims = new List<Claim>
             {
@@ -32,7 +32,10 @@ namespace LogisticApi.Infrastructure.Implementations.Services
                 new Claim(ClaimTypes.Email,user.Email),
 
             };
-
+            foreach (var role in roles)
+            {
+                userclaims.Add(new Claim(ClaimTypes.Role, role));
+            }
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             JwtSecurityToken token = new JwtSecurityToken(

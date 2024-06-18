@@ -3,10 +3,11 @@ using LogisticApi.Application.DTOs.PartnerCompanyDTOs;
 using LogisticApi.Application.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LogisticApi.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AboutsController : ControllerBase
     {
@@ -28,12 +29,14 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id, isdeleted));
         }
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateAsync([FromForm] AboutCreateDto aboutDto)
         {
             await _service.CreateAsync(aboutDto);
             return StatusCode(StatusCodes.Status200OK);
         }
         [HttpPut("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> UpdateAsync([FromForm] AboutUpdateDto updateDto, int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -41,6 +44,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK);
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -48,6 +52,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK);
         }
         [HttpPatch("recovery/{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> RecoveryAsync(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -55,6 +60,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> SoftDeleteAsync(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);

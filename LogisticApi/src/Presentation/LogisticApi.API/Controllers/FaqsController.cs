@@ -30,12 +30,14 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id, isdeleted));
         }
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateAsync([FromForm] FaqCreateDto createDto)
         {
             await _service.CreateAsync(createDto);
             return StatusCode(StatusCodes.Status200OK);
         }
         [HttpPut("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> UpdateAsync([FromForm] FaqUpdateDto updateDto, int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -43,6 +45,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK);
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -50,6 +53,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK);
         }
         [HttpPatch("recovery/{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> RecoveryAsync(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -57,6 +61,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> SoftDeleteAsync(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
