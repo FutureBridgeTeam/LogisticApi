@@ -1,6 +1,7 @@
 ﻿using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.AutenticationDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,13 +29,14 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK, await _service.Login(loginDto));
         }
         [HttpGet]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateRole()
         {
             await _service.CreateRoleAsync();
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword([FromForm] string email )
+        public async Task<IActionResult> ForgotPassword([FromForm] string email)
         {         
             return StatusCode(StatusCodes.Status200OK, await _service.ForgotPasswordAsync(email));
         }

@@ -2,6 +2,7 @@
 using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.OrderDTOs;
 using LogisticApi.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK, await _service.GetAllAsync(page, take,isdeleted));
         }
         [HttpGet]
+        [Authorize(Roles = "Admin,Member")]
         public async Task<IActionResult> GetAllByCurrentlyUser(OrderStatus? orderStatus, int page = 1, int take = 3)
         {
             return StatusCode(StatusCodes.Status200OK, await _service.GetAllByCurrentlyUser(page, take,orderStatus));
@@ -46,6 +48,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> ChangeOrderStatus(int id, [FromForm]OrderChangeStatusDto dto)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -54,6 +57,7 @@ namespace LogisticApi.API.Controllers
         } 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -61,6 +65,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -68,6 +73,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Recovery(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
@@ -75,6 +81,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPut("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Submit(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);

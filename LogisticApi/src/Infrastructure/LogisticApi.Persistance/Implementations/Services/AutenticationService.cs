@@ -75,7 +75,8 @@ namespace LogisticApi.Persistance.Implementations.Services
             }
             if (!await _userManager.CheckPasswordAsync(user, loginDto.Password)) throw new LoginException();
             int expiredat = loginDto.isRemembered ? 4300 : 60;
-            return _jwtTokenService.CreateJwtToken(user, expiredat);
+            var roles = (await _userManager.GetRolesAsync(user)).ToList(); ;
+            return _jwtTokenService.CreateJwtToken(user, expiredat,roles);
         }
         public bool IsUserCurrent()
         {
