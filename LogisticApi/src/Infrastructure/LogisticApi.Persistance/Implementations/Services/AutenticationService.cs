@@ -6,6 +6,7 @@ using LogisticApi.Application.DTOs.AutenticationDTOs;
 using LogisticApi.Application.DTOs.TokenDTOs;
 using LogisticApi.Domain.Entities;
 using LogisticApi.Domain.Enums;
+using LogisticApi.Persistance.Utilites.Exceptions.Authentication;
 using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -70,9 +71,9 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (user == null)
             {
                 user = await _userManager.FindByEmailAsync(loginDto.UsernameOrEmail);
-                if (user == null) throw new Exception("Email,Password or Username is incorrect");
+                if (user == null) throw new LoginException();
             }
-            if (!await _userManager.CheckPasswordAsync(user, loginDto.Password)) throw new Exception("Email,Password or Username is incorrect");
+            if (!await _userManager.CheckPasswordAsync(user, loginDto.Password)) throw new LoginException();
             int expiredat = loginDto.isRemembered ? 4300 : 60;
             return _jwtTokenService.CreateJwtToken(user, expiredat);
         }
@@ -84,11 +85,11 @@ namespace LogisticApi.Persistance.Implementations.Services
         {
             var id = _accessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (id is null)
-                throw new Exception("UserId is null");
+                throw new UserNotFoundException();
 
             var user = await _userManager.FindByIdAsync(id);
             if (user is null)
-                throw new Exception("User not Found");
+                throw new UserNotFoundException();
 
             var dto = _mapper.Map<AppUserGetDto>(user);
 
@@ -117,17 +118,17 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task<string> ForgotPasswordAsync(string email)
         {
             AppUser user = await _userManager.FindByEmailAsync(email);
-            if (user == null) throw new Exception("User not found");
+            if (user == null) throw new UserNotFoundException();
             string token = await _userManager.GeneratePasswordResetTokenAsync(user);
             return token;
         }
         public async Task ResetPassword(ResetPasswordDto dto, string token)
         {
             var userid = _accessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier); // Bu hisse deyisdirilecek //
-            if (userid == null) throw new Exception("Userid not found");
+            if (userid == null) throw new UserNotFoundException();
             var user = await _userManager.FindByIdAsync(userid);
-            if (user == null) throw new Exception("User not found");
-            if (await _userManager.CheckPasswordAsync(user, dto.Password)) throw new Exception("The new password cannot be the same as the old one.");
+            if (user == null) throw new UserNotFoundException();
+            if (await _userManager.CheckPasswordAsync(user, dto.Password)) throw new SamePasswordException();
             var result = await _userManager.ResetPasswordAsync(user, token, dto.Password);
             if (!result.Succeeded)
             {
@@ -142,7 +143,7 @@ namespace LogisticApi.Persistance.Implementations.Services
         private async Task<AppUser> _getUserById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user is null) throw new Exception("User not found(");
+            if (user is null) throw new UserNotFoundException();
             return user;
         }
 

@@ -4,6 +4,7 @@ using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.PartnerCompanyDTOs;
 using LogisticApi.Domain.Entities;
+using LogisticApi.Persistance.Utilites.Exceptions.Common;
 using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -40,7 +41,7 @@ namespace LogisticApi.Persistance.Implementations.Services
 
         public async Task CreateAsync(PartnerCompanyCreateDto partnerdto)
         {
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == partnerdto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == partnerdto.Name.ToUpper().Trim())) throw new AlreadyExistException();
             partnerdto.Image.ValidateImage();
             PartnerCompany service = _mapper.Map<PartnerCompany>(partnerdto);
             service.IsDeleted = false;
@@ -52,10 +53,10 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task UpdateAsync(PartnerCompanyUpdateDto partnerdto, int id)
         {
             PartnerCompany existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             if (existed.Name != partnerdto.Name)
             {
-                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == partnerdto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
+                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == partnerdto.Name.ToUpper().Trim())) throw new AlreadyExistException();
 
             }
             existed = _mapper.Map(partnerdto, existed);
@@ -64,7 +65,7 @@ namespace LogisticApi.Persistance.Implementations.Services
             {
                 partnerdto.NewImage.ValidateImage();
                 var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
-                if (result == false) throw new Exception("File can't delete");
+                if (result == false) throw new UnDeleteException();
                 existed.Image = await _cloudinaryService.FileCreateAsync(partnerdto.NewImage);
             }
             await _repository.UpdateAsync(existed);
@@ -72,16 +73,16 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task DeleteAsync(int id)
         {
             PartnerCompany existed=await _repository.GetByIdWithoutDeletedAsync(id);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
-            if(result==false) throw new Exception("Image can't delete");
+            if (result == false) throw new UnDeleteException();
             await _repository.DeleteAsync(existed);
         }
 
         public async Task ReverseDeleteAsync(int id)
         {
             PartnerCompany existed = await _repository.GetByIdAsync(id,isDeleted:true);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             _repository.Recovery(existed);
             await _repository.SaveChangesAsync();
         }
@@ -89,7 +90,7 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task SoftDeleteAsync(int id)
         {
             PartnerCompany existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             _repository.SoftDelete(existed);
             await _repository.SaveChangesAsync();
         }

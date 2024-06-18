@@ -5,6 +5,7 @@ using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.ToCountryDTOs;
 using LogisticApi.Domain.Entities;
 using LogisticApi.Persistance.Contexts;
+using LogisticApi.Persistance.Utilites.Exceptions.Common;
 using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,12 +34,12 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task<ToCountryItemDto> GetAsync(int id)
         {
             ToCountry toCountry = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (toCountry == null) throw new Exception("Not Found((");
+            if (toCountry == null) throw new NotFoundException();
             return _mapper.Map<ToCountryItemDto>(toCountry);
         }
         public async Task Create(ToCountryCreateDto dto)
         {
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper())) throw new Exception("You have this ToCountry please change Name");
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper())) throw new AlreadyExistException();
             ToCountry toCountry = _mapper.Map<ToCountry>(dto);
             toCountry.IsDeleted = false;
             toCountry.Name = dto.Name.Capitalize();
@@ -47,8 +48,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task Update(ToCountryUpdateDto dto, int id)
         {
             ToCountry existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("Not Found((");
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper())) throw new Exception("You have this ToCountry please change Name");
+            if (existed == null) throw new NotFoundException();
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper())) throw new AlreadyExistException();
             existed.Name = dto.Name.Capitalize();
             existed = _mapper.Map(dto, existed);
             await _repository.UpdateAsync(existed);
@@ -56,20 +57,20 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task Delete(int id)
         {
             ToCountry existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             await _repository.DeleteAsync(existed);
         }
         public async Task ReverseDelete(int id)
         {
             ToCountry existed = await _repository.GetByIdAsync(id, isDeleted: true);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             _repository.Recovery(existed);
             await _repository.SaveChangesAsync();
         }
         public async Task SoftDeleteAsync(int id)
         {
             ToCountry existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             _repository.SoftDelete(existed);
             await _repository.SaveChangesAsync();
         }

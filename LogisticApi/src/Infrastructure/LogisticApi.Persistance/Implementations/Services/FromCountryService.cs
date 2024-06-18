@@ -3,6 +3,7 @@ using LogisticApi.Application.Abstraction.Repostories;
 using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Domain.Entities;
+using LogisticApi.Persistance.Utilites.Exceptions.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,12 +33,12 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task<FromCountryItemDto> GetAsync(int id,bool isdeleted)
         {
             FromCountry fromCountry = await _repository.GetByIdAsync(id, isDeleted: isdeleted);
-            if (fromCountry == null) throw new Exception("Not Found((");
+            if (fromCountry == null) throw new NotFoundException();
             return _mapper.Map<FromCountryItemDto>(fromCountry);
         }
         public async Task CreateAsync(FromCountryCreateDto fromCountryDto)
         {
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == fromCountryDto.Name.ToUpper().Trim())) throw new Exception("You have this Country please change Name");
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == fromCountryDto.Name.ToUpper().Trim())) throw new AlreadyExistException();
             FromCountry fromCountry = _mapper.Map<FromCountry>(fromCountryDto);
             fromCountry.IsDeleted = false;
             await _repository.AddAsync(fromCountry);
@@ -47,17 +48,17 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task UpdateAsync(FromCountryUpdateDto fromCountryDto, int id)
         {
             FromCountry existed = await _repository.GetByIdAsync(id,isDeleted:false);
-            if (existed == null) throw new Exception("Not Found");
+            if (existed == null) throw new NotFoundException();
             if (fromCountryDto.Name != existed.Name)
             {
-                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == fromCountryDto.Name.ToUpper().Trim())) throw new Exception("You have this Country please change Name");
+                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == fromCountryDto.Name.ToUpper().Trim())) throw new AlreadyExistException();
             }
             await _repository.UpdateAsync(_mapper.Map(fromCountryDto, existed));
         }
         public async Task DeleteAsync(int id)
         {
             FromCountry existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("Not Found");
+            if (existed == null) throw new NotFoundException();
             await _repository.DeleteAsync(existed);
 
         }
