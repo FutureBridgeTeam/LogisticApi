@@ -3,6 +3,7 @@ using LogisticApi.Application.Abstraction.Repostories;
 using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs.CustomInfoDTOs;
 using LogisticApi.Domain.Entities;
+using LogisticApi.Persistance.Utilites.Exceptions.Common;
 using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,11 +34,12 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task<CustomInfoItemDto> GetAsync(int id, bool isDeleted)
         {
             CustomInfo customInfo = await _repository.GetByIdAsync(id, isDeleted: isDeleted);
+            if (customInfo == null) throw new NotFoundException();
             return _mapper.Map<CustomInfoItemDto>(customInfo);
         }
         public async Task CreateAsync(CustomInfoCreateDto custominfocreateDto)
         {
-            if (await _repository.IsExistAsync(x => x.Tittle == custominfocreateDto.Tittle)) throw new Exception("You have this Tittle");
+            if (await _repository.IsExistAsync(x => x.Tittle == custominfocreateDto.Tittle)) throw new AlreadyExistException();
             custominfocreateDto.Image.ValidateImage();
             CustomInfo custominfo = _mapper.Map<CustomInfo>(custominfocreateDto);
             custominfo.IsDeleted = false;
@@ -48,39 +50,39 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task DeleteAsync(int id)
         {
             CustomInfo existed = await _repository.GetByIdAsync(id);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
-            if (result == false) throw new Exception("Image can't delete");
+            if (result == false) throw new UnDeleteException();
             await _repository.DeleteAsync(existed);
         }
         public async Task ReverseDeleteAsync(int id)
         {
             CustomInfo existed = await _repository.GetByIdAsync(id, isDeleted: true);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             _repository.Recovery(existed);
             await _repository.SaveChangesAsync();
         }
         public async Task SoftDeleteAsync(int id)
         {
             CustomInfo existed = await _repository.GetByIdAsync(id);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             _repository.SoftDelete(existed);
             await _repository.SaveChangesAsync();
         }
         public async Task UpdateAsync(CustomInfoUpdateDto custominfoupdateDto, int id)
         {
             CustomInfo existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             if (existed.Tittle != custominfoupdateDto.Tittle)
             {
                 if (await _repository.IsExistAsync(x => x.Tittle.ToUpper() == custominfoupdateDto.Tittle.ToUpper().Trim()))
-                    throw new Exception("You have this Tittle");
+                    throw new AlreadyExistException();
             }
             if (custominfoupdateDto.NewImage != null)
             {
                 custominfoupdateDto.NewImage.ValidateImage();
                 var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
-                if (result == false) throw new Exception("File can't delete");
+                if (result == false) throw new UnDeleteException();
                 existed.Image = await _cloudinaryService.FileCreateAsync(custominfoupdateDto.NewImage);
             }
             existed = _mapper.Map(custominfoupdateDto, existed);

@@ -3,6 +3,7 @@ using LogisticApi.Application.Abstraction.Repostories;
 using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Domain.Entities;
+using LogisticApi.Persistance.Utilites.Exceptions.Common;
 using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,12 +34,12 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task<ServiceItemDto> GetAsync(int id)
         {
             Service service = await _repository.GetByIdAsync(id,isDeleted:false);
-            if (service == null) throw new Exception("Not Found((");
+            if (service == null) throw new NotFoundException();
             return _mapper.Map<ServiceItemDto>(service);
         }
         public async Task Create(ServiceCreateDto categoryDto)
         {
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == categoryDto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == categoryDto.Name.ToUpper().Trim())) throw new AlreadyExistException();
             categoryDto.Image.ValidateImage();
             Service service=_mapper.Map<Service>(categoryDto);
             service.IsDeleted = false;
@@ -51,10 +52,10 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task Update(ServiceUpdateDto dto, int id)
         {
             Service existed= await _repository.GetByIdAsync(id, isDeleted:false);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             if (existed.Name != dto.Name)
             {
-                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper().Trim())) throw new Exception("You have this Service please change Name");
+                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper().Trim())) throw new AlreadyExistException();
             }
             existed = _mapper.Map(dto, existed);
 
@@ -62,7 +63,7 @@ namespace LogisticApi.Persistance.Implementations.Services
             {
                 dto.NewImage.ValidateImage();
                 var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
-                if (result == false) throw new Exception("File can't delete");
+                if (result == false) throw new UnDeleteException();
                 existed.Image = await _cloudinaryService.FileCreateAsync(dto.NewImage);
             }
             await _repository.UpdateAsync(existed);           
@@ -71,22 +72,22 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task Delete(int id)
         {
             Service existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
-            if (result == false) throw new Exception("File can't delete");
+            if (result == false) throw new UnDeleteException();
             await _repository.DeleteAsync(existed);
         }
         public async Task ReverseDelete(int id)
         {
             Service existed = await _repository.GetByIdAsync(id, isDeleted: true);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             _repository.Recovery(existed);
             await _repository.SaveChangesAsync();
         }
         public async Task SoftDeleteAsync(int id)
         {
             Service existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             _repository.SoftDelete(existed);
             await _repository.SaveChangesAsync();
         }

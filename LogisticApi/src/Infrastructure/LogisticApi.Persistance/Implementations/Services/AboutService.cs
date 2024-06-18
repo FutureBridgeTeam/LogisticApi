@@ -4,6 +4,7 @@ using LogisticApi.Application.Abstraction.Services;
 using LogisticApi.Application.DTOs;
 using LogisticApi.Application.DTOs.PartnerCompanyDTOs;
 using LogisticApi.Domain.Entities;
+using LogisticApi.Persistance.Utilites.Exceptions.Common;
 using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -50,14 +51,14 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task UpdateAsync(AboutUpdateDto aboutdto, int id)
         {
             About existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("Not Found((");
+            if (existed == null) throw new NotFoundException();
             existed = _mapper.Map(aboutdto, existed);
 
             if (aboutdto.NewImage != null)
             {
                 aboutdto.NewImage.ValidateImage();
                 var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
-                if (result == false) throw new Exception("File can't delete");
+                if (result == false) throw new UnDeleteException();
                 existed.Image = await _cloudinaryService.FileCreateAsync(aboutdto.NewImage);
             }
             await _repository.UpdateAsync(existed);
@@ -65,16 +66,16 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task DeleteAsync(int id)
         {
             About existed = await _repository.GetByIdWithoutDeletedAsync(id);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             var result = await _cloudinaryService.FileDeleteAsync(existed.Image);
-            if (result == false) throw new Exception("Image can't delete");
+            if (result == false) throw new UnDeleteException();
             await _repository.DeleteAsync(existed);
         }
 
         public async Task ReverseDeleteAsync(int id)
         {
             About existed = await _repository.GetByIdAsync(id, isDeleted: true);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             _repository.Recovery(existed);
             await _repository.SaveChangesAsync();
         }
@@ -82,7 +83,7 @@ namespace LogisticApi.Persistance.Implementations.Services
         public async Task SoftDeleteAsync(int id)
         {
             About existed = await _repository.GetByIdAsync(id, isDeleted: false);
-            if (existed == null) throw new Exception("not Found");
+            if (existed == null) throw new NotFoundException();
             _repository.SoftDelete(existed);
             await _repository.SaveChangesAsync();
         }
