@@ -25,13 +25,13 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<FaqItemDto>> GetAllAsync(int page, int take,bool isdeleted)
         {
-            ICollection<Faq> faqs = await _repository.GetAllWhere(isDeleted: false, skip: (page - 1) * take, take: take).ToListAsync();
+            ICollection<Faq> faqs = await _repository.GetAllWhere(isDeleted: isdeleted, skip: (page - 1) * take, take: take).ToListAsync();
             return _mapper.Map<ICollection<FaqItemDto>>(faqs);
         }
 
         public async Task<FaqItemDto> GetAsync(int id, bool isDeleted)
         {
-            Faq faq = await _repository.GetByIdAsync(id, isDeleted: false);
+            Faq faq = await _repository.GetByIdAsync(id, isDeleted: isDeleted);
             if (faq == null) throw new NotFoundException();
             return _mapper.Map<FaqItemDto>(faq);
         }

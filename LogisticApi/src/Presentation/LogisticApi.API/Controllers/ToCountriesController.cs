@@ -18,26 +18,26 @@ namespace LogisticApi.API.Controllers
             _service = service;
         }
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 1, int take = 3)
+        public async Task<IActionResult> Get(bool isdeleted,int page = 1, int take = 3)
         {
-            return StatusCode(StatusCodes.Status200OK, await _service.GetAllAsync(page, take));
+            return StatusCode(StatusCodes.Status200OK, await _service.GetAllAsync(page, take,isdeleted));
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(bool isdeleted,int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
-            return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id));
+            return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id,isdeleted));
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Create([FromForm]ToCountryCreateDto dto)
+        public async Task<IActionResult> Create(ToCountryCreateDto dto)
         {
             await _service.Create(dto);
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPut]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Update([FromForm]ToCountryUpdateDto dto,int id)
+        public async Task<IActionResult> Update(ToCountryUpdateDto dto,int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
             await _service.Update(dto, id);

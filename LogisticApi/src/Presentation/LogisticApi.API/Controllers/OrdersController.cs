@@ -42,14 +42,14 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK, await _service.GetByTrackingId(trackingId));
         }
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] OrderCreateDto dto)
+        public async Task<IActionResult> Create( OrderCreateDto dto)
         {
             await _service.CreateAsync(dto);
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPatch("{id}")]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> ChangeOrderStatus(int id, [FromForm]OrderChangeStatusDto dto)
+        public async Task<IActionResult> ChangeOrderStatus(int id,OrderChangeStatusDto dto)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
             await _service.ChangeOrderStatus(id, dto);

@@ -26,14 +26,14 @@ namespace LogisticApi.Persistance.Implementations.Services
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<ICollection<ToCountryItemDto>> GetAllAsync(int page, int take)
+        public async Task<ICollection<ToCountryItemDto>> GetAllAsync(int page, int take, bool isdeleted)
         {
-            ICollection<ToCountry> toCountries = await _repository.GetAllWhere(skip: (page - 1) * take, take: take, isDeleted: false).ToListAsync();
+            ICollection<ToCountry> toCountries = await _repository.GetAllWhere(skip: (page - 1) * take, take: take, isDeleted: isdeleted).ToListAsync();
             return _mapper.Map<ICollection<ToCountryItemDto>>(toCountries);
         }
-        public async Task<ToCountryItemDto> GetAsync(int id)
+        public async Task<ToCountryItemDto> GetAsync(int id, bool isdeleted)
         {
-            ToCountry toCountry = await _repository.GetByIdAsync(id, isDeleted: false);
+            ToCountry toCountry = await _repository.GetByIdAsync(id, isDeleted: isdeleted);
             if (toCountry == null) throw new NotFoundException();
             return _mapper.Map<ToCountryItemDto>(toCountry);
         }

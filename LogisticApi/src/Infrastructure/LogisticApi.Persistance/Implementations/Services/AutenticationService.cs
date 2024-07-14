@@ -7,6 +7,7 @@ using LogisticApi.Application.DTOs.TokenDTOs;
 using LogisticApi.Domain.Entities;
 using LogisticApi.Domain.Enums;
 using LogisticApi.Persistance.Utilites.Exceptions.Authentication;
+using LogisticApi.Persistance.Utilites.Exceptions.Common;
 using LogisticApi.Persistance.Utilites.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -47,11 +48,11 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task Register(RegisterDto registerDto)
         {
-            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName || x.Email == registerDto.Email)) throw new Exception("Email or Username have");
+            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName || x.Email == registerDto.Email)) throw new AlreadyExistException("Email or Username have");
             AppUser user = _mapper.Map<AppUser>(registerDto);
-            if (registerDto.ProfileImage != null)
+            if (registerDto.Image != null)
             {
-                user.ProfileImage = await _cloudinaryService.FileCreateAsync(registerDto.ProfileImage);
+                user.ProfileImage = await _cloudinaryService.FileCreateAsync(registerDto.Image);
             }
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded)
@@ -75,7 +76,7 @@ namespace LogisticApi.Persistance.Implementations.Services
             }
             if (!await _userManager.CheckPasswordAsync(user, loginDto.Password)) throw new LoginException();
             int expiredat = loginDto.isRemembered ? 4300 : 60;
-            var roles = (await _userManager.GetRolesAsync(user)).ToList(); ;
+            var roles = (await _userManager.GetRolesAsync(user)).ToList();
             return _jwtTokenService.CreateJwtToken(user, expiredat,roles);
         }
         public bool IsUserCurrent()

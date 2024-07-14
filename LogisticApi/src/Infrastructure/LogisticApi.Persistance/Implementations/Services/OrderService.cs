@@ -102,6 +102,11 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (!isvalid) throw new BadRequestException();
             existed.Status=changeStatusDto.Status;
             await _repository.UpdateAsync(existed);
+            if (existed.Status == OrderStatus.ArrivedAtTheSetSpot)
+            {
+                string body = $"Hörmətli {existed.CompanyName} Komandası,\r\n\r\nSifarişinizin uğurla tamamlandığını bildirməkdən məmnunluq duyuruq. Bizimlə çalışdığınız üçün təşəkkür edirik. Gələcəkdə yenidən sizə xidmət göstərməkdən məmnun olarıq.\r\n\r\nHörmətlə,,\r\nMurphy Logistic and shiping";
+                await _emailService.SendEmailAsync(existed.CompanyEmail, "Order request", body);
+            }
         }
         public async Task DeleteAsync(int id)
         {

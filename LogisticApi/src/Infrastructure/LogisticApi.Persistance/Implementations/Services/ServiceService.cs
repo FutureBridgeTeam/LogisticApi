@@ -26,14 +26,15 @@ namespace LogisticApi.Persistance.Implementations.Services
             _mapper = mapper;
             _cloudinaryService = cloudinaryService;
         }
-        public async Task<ICollection<ServiceItemDto>> GetAllAsync(int page, int take)
+        public async Task<ICollection<ServiceItemDto>> GetAllAsync(int page, int take,bool isdeleted)
         {
-            ICollection<Service> services = await _repository.GetAll(isDeleted:false).ToListAsync();
+            ICollection<Service> services = await _repository.GetAllWhere(isDeleted: isdeleted, skip: (page - 1) * take, take: take).ToListAsync();
             return _mapper.Map<ICollection<ServiceItemDto>>(services);
         }
-        public async Task<ServiceItemDto> GetAsync(int id)
+        public async Task<ServiceItemDto> GetAsync(int id, bool isdeleted)
         {
-            Service service = await _repository.GetByIdAsync(id,isDeleted:false);
+
+            Service service = await _repository.GetByIdAsync(id,isDeleted:isdeleted);
             if (service == null) throw new NotFoundException();
             return _mapper.Map<ServiceItemDto>(service);
         }

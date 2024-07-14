@@ -1,19 +1,25 @@
+using LogisticApi.API.Extensions;
 using LogisticApi.Application.ServiceRegistration;
-using LogisticApi.Domain.Entities;
 using LogisticApi.Infrastructure.ServiceRegistration;
 using LogisticApi.Persistance.ServiceRegistration;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using LogisticApi.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
+// Swagger/OpenAPI configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
@@ -34,27 +40,31 @@ builder.Services.AddSwaggerGen(opt =>
             {
                 Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
             },
             new string[]{}
         }
     });
 });
+
 builder.Services.AddPersistanceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Enable CORS
+app.UseCors();
 
+// Swagger setup
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// Exception handler setup
 app.AddExceptionHandlerService();
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

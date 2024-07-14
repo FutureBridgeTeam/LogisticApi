@@ -16,7 +16,7 @@ namespace LogisticApi.Application.DTOs
         public string Email { get; set; } = null!;
         public string Password { get; set; }=null!;
         public string ConfirmPassword { get; set; } = null!;
-        public IFormFile? ProfileImage { get; set; }
+        public IFormFile? Image { get; set; }
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
     }

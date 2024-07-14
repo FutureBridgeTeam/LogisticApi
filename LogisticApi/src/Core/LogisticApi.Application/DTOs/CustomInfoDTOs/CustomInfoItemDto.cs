@@ -9,6 +9,7 @@ namespace LogisticApi.Application.DTOs.CustomInfoDTOs
 {
     public record CustomInfoItemDto
     {
+        public int Id { get; set; }
         public string Tittle { get; set; } = null!;
         public string Image { get; set; } = null!;
     }

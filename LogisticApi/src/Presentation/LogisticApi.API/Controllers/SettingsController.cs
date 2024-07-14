@@ -35,7 +35,7 @@ namespace LogisticApi.API.Controllers
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Create([FromForm] SettingCreateDto dto)
+        public async Task<IActionResult> Create( SettingCreateDto dto)
         {
             await _service.CreateAsync(dto);
             return StatusCode(StatusCodes.Status201Created);

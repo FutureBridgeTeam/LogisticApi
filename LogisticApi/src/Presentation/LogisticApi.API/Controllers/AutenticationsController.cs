@@ -17,6 +17,11 @@ namespace LogisticApi.API.Controllers
         {
             _service = service;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            return StatusCode(StatusCodes.Status200OK, await _service.GetCurrentUserAsync());
+        }
         [HttpPost]
         public async Task<IActionResult> Register([FromForm]RegisterDto registerDto)
         {
@@ -24,7 +29,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPost]
-        public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
+        public async Task<IActionResult> Login( LoginDto loginDto)
         {         
             return StatusCode(StatusCodes.Status200OK, await _service.Login(loginDto));
         }
@@ -36,12 +41,12 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword([FromForm] string email)
+        public async Task<IActionResult> ForgotPassword( string email)
         {         
             return StatusCode(StatusCodes.Status200OK, await _service.ForgotPasswordAsync(email));
         }
         [HttpPost]
-        public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordDto dto,string token)
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto dto,string token)
         {
             await _service.ResetPassword(dto,token);
             return StatusCode(StatusCodes.Status200OK);

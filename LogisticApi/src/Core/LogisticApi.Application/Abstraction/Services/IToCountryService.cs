@@ -10,8 +10,8 @@ namespace LogisticApi.Application.Abstraction.Services
 {
     public interface IToCountryService
     {
-        Task<ICollection<ToCountryItemDto>> GetAllAsync(int page, int take);
-        Task<ToCountryItemDto> GetAsync(int id);
+        Task<ICollection<ToCountryItemDto>> GetAllAsync(int page, int take, bool isdeleted);
+        Task<ToCountryItemDto> GetAsync(int id, bool isdeleted);
         Task Create(ToCountryCreateDto dto);
         Task Update(ToCountryUpdateDto dto, int id);
         Task SoftDeleteAsync(int id);

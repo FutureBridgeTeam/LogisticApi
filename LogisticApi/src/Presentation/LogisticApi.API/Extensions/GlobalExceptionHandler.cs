@@ -24,7 +24,6 @@ namespace LogisticApi.API.Extensions
                             var error = contextFeature.Error;
                             statusCode = 400;
                             message = error.Message;
-
                         }
                     }
                     context.Response.StatusCode = statusCode;
