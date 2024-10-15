@@ -4,7 +4,7 @@
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
     <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\Properties\PublishProfiles\alihuseyn-001-site1 - Web Deploy2.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\user\Desktop\LogisticApi\LogisticApi\src\Presentation\LogisticApi.API\Properties\PublishProfiles\thetest-001-site1 - Web Deploy1.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

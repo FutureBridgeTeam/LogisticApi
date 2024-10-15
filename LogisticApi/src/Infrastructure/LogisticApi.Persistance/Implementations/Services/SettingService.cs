@@ -25,7 +25,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<SettingItemDto>> GetAllAsync(int page, int take,bool isdeleted)
         {
-            ICollection<Setting> settings = await _repository.GetAllWhere(isDeleted: isdeleted, skip: (page - 1) * take, take: take).ToListAsync();
+            ICollection<Setting> settings = await _repository.GetAllWhere(isDeleted: isdeleted
+                , skip: (page - 1) * take, take: take).ToListAsync();
             return _mapper.Map<ICollection<SettingItemDto>>(settings);
         }
 
@@ -43,7 +44,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task CreateAsync(SettingCreateDto settingDto)
         {
-            if (await _repository.IsExistAsync(x => x.Key.ToUpper() == settingDto.Key.ToUpper().Trim())) throw new AlreadyExistException();
+            if (await _repository.IsExistAsync(x => x.Key.ToUpper() == settingDto.Key.ToUpper().Trim()))
+                throw new AlreadyExistException();
             Setting setting = _mapper.Map<Setting>(settingDto);
             setting.IsDeleted = false;
             await _repository.AddAsync(setting);

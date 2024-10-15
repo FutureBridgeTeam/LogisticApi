@@ -73,11 +73,11 @@ namespace LogisticApi.Persistance.Implementations.Repostories.Generic
             {
                 query = isDescending ? query.OrderByDescending(orderexpression) : query.OrderBy(orderexpression);
             }
-            if (skip != 0) query = query.Skip(skip);
-            if (take != 0) query = query.Take(take);
             if (isDeleted == null) query = query.Where(x => x.IsDeleted == null);
             else if (isDeleted == false) query = query.Where(x => x.IsDeleted == false);
             else if (isDeleted == true) query = query.Where(x => x.IsDeleted == true);
+            if (skip != 0) query = query.Skip(skip);
+            if (take != 0) query = query.Take(take);
             query = isTracking ? query : query.AsNoTracking();
             query = queryFilter ? query : query.IgnoreQueryFilters();
             query = Includes(query, includes);

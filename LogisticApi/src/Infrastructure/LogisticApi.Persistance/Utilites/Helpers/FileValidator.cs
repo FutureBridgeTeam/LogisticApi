@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LogisticApi.Persistance.Utilites.Exceptions.Common;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,15 +22,15 @@ namespace LogisticApi.Persistance.Utilites.Helpers
 
             return true;
         }
-        public static void ValidateImage(this IFormFile file, int mb = 2)
+        public static void ValidateImage(this IFormFile file, int mb = 4)
         {
             if (!file.ValidateType())
             {
-                throw new Exception("Please enter a image");
+                throw new ImageNotValidateException("Please enter a image");
             };
             if (!file.ValidateSize(mb))
             {
-                throw new Exception($"The maximum size of the Image should be {mb} MB");
+                throw new ImageNotValidateException($"The maximum size of the Image should be {mb} MB");
             }
         }
     }

@@ -48,10 +48,13 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task Register(RegisterDto registerDto)
         {
-            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName || x.Email == registerDto.Email)) throw new AlreadyExistException("Email or Username have");
+            if (await _userManager.Users
+                .AnyAsync(x => x.UserName == registerDto.UserName
+                || x.Email == registerDto.Email)) throw new AlreadyExistException("Email or Username have");
             AppUser user = _mapper.Map<AppUser>(registerDto);
             if (registerDto.Image != null)
             {
+                registerDto.Image.ValidateImage();
                 user.ProfileImage = await _cloudinaryService.FileCreateAsync(registerDto.Image);
             }
             var result = await _userManager.CreateAsync(user, registerDto.Password);

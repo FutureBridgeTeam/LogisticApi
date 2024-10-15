@@ -24,7 +24,7 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK, await _service.GetAllAsync(page, take,isdeleted));
         }
         [HttpGet]
-        [Authorize(Roles = "Admin,Member")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetAllByCurrentlyUser(OrderStatus? orderStatus, int page = 1, int take = 3)
         {
             return StatusCode(StatusCodes.Status200OK, await _service.GetAllByCurrentlyUser(page, take,orderStatus));
@@ -42,14 +42,14 @@ namespace LogisticApi.API.Controllers
             return StatusCode(StatusCodes.Status200OK, await _service.GetByTrackingId(trackingId));
         }
         [HttpPost]
-        public async Task<IActionResult> Create( OrderCreateDto dto)
+        public async Task<IActionResult> Create([FromForm] OrderCreateDto dto)
         {
             await _service.CreateAsync(dto);
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPatch("{id}")]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> ChangeOrderStatus(int id,OrderChangeStatusDto dto)
+        public async Task<IActionResult> ChangeOrderStatus([FromForm] OrderChangeStatusDto dto, int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
             await _service.ChangeOrderStatus(id, dto);

@@ -40,7 +40,9 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<OrderItemDto>> GetAllAsync(int page, int take, bool? isdeleted)
         {
-            ICollection<Order> orders = await _repository.GetAllWhere(isDeleted: isdeleted, skip: (page - 1) * take, take: take).ToListAsync();
+            ICollection<Order> orders = await _repository.GetAllWhere(isDeleted: isdeleted,
+                skip: (page - 1) * take, take: take,
+                includes:new string[] { nameof(ToCountry),  nameof(FromCountry),nameof(Service) }).ToListAsync();
             return _mapper.Map<ICollection<OrderItemDto>>(orders);
         }
         public async Task<ICollection<OrderItemDto>> GetAllByCurrentlyUser(int page, int take,OrderStatus? orderStatus)
@@ -49,25 +51,31 @@ namespace LogisticApi.Persistance.Implementations.Services
             ICollection < Order > orders= new List<Order>();
             if (orderStatus == null)
             {
-                orders = await _repository.GetAllWhere(x=>x.AppUserId==user.Id,orderexpression:x=>x.Id,isDescending:true,isDeleted: false, skip: (page - 1) * take, take: take).ToListAsync();
+                orders = await _repository.GetAllWhere(x=>x.AppUserId==user.Id,orderexpression:x=>x.Id,
+                    isDescending:true,isDeleted: false, skip: (page - 1) * take, take: take,
+                    includes: new string[] { nameof(ToCountry), nameof(FromCountry), nameof(Service) }).ToListAsync();
             }
             else
             {
                 bool isvalid = Enum.IsDefined(typeof(OrderStatus), orderStatus);
                 if (!isvalid) throw new BadRequestException();
-                orders = await _repository.GetAllWhere(x => x.AppUserId == user.Id && x.Status==orderStatus, orderexpression: x => x.Id, isDescending: true, isDeleted: false, skip: (page - 1) * take, take: take).ToListAsync();
+                orders = await _repository.GetAllWhere(x => x.AppUserId == user.Id && x.Status==orderStatus,
+                    orderexpression: x => x.Id, isDescending: true, isDeleted: false, skip: (page - 1) * take, 
+                    take: take, includes: new string[] { nameof(ToCountry), nameof(FromCountry), nameof(Service) }).ToListAsync();
             }
             return _mapper.Map<ICollection<OrderItemDto>>(orders);
         }
         public async Task<OrderItemDto> GetAsync(int id, bool? isdeleted)
         {
-            Order order = await _repository.GetByIdAsync(id, isDeleted: isdeleted);
+            Order order = await _repository.GetByIdAsync(id, isDeleted: isdeleted,
+                includes: new string[] { nameof(ToCountry), nameof(FromCountry), nameof(Service) });
             if (order == null) throw new NotFoundException();
             return _mapper.Map<OrderItemDto>(order);
         }
         public async Task<OrderItemDto> GetByTrackingId(string trackingId)
         {
-            Order order = await _repository.GetByExpressionAsync(x=>x.TrackingId == trackingId);
+            Order order = await _repository.GetByExpressionAsync(x=>x.TrackingId == trackingId,
+                includes: new string[] { nameof(ToCountry), nameof(FromCountry), nameof(Service) });
             if (order == null) throw new NotFoundException();
             return _mapper.Map<OrderItemDto>(order);
         }
@@ -93,6 +101,8 @@ namespace LogisticApi.Persistance.Implementations.Services
             }
             order.IsDeleted = null;
             await _repository.AddAsync(order);
+            string body = $"Hörmətli {order.CompanyName} Komandası,\r\n\r\nSifarişinizin qəbul edildiyini bildirməkdən məmnunluq duyuruq.Tezlikle sizinle elaqe saxlanilacaq . Bizimlə çalışdığınız üçün təşəkkür edirik. Gələcəkdə yenidən sizə xidmət göstərməkdən məmnun olarıq.\r\n\r\nHörmətlə,\r\nMurphy Logistic and shiping";
+            await _emailService.SendEmailAsync(order.CompanyEmail, "Order request", body);
         }
         public async Task ChangeOrderStatus(int id,OrderChangeStatusDto changeStatusDto)
         {
@@ -104,7 +114,7 @@ namespace LogisticApi.Persistance.Implementations.Services
             await _repository.UpdateAsync(existed);
             if (existed.Status == OrderStatus.ArrivedAtTheSetSpot)
             {
-                string body = $"Hörmətli {existed.CompanyName} Komandası,\r\n\r\nSifarişinizin uğurla tamamlandığını bildirməkdən məmnunluq duyuruq. Bizimlə çalışdığınız üçün təşəkkür edirik. Gələcəkdə yenidən sizə xidmət göstərməkdən məmnun olarıq.\r\n\r\nHörmətlə,,\r\nMurphy Logistic and shiping";
+                string body = $"Hörmətli {existed.CompanyName} Komandası,\r\n\r\nSifarişinizin uğurla tamamlandığını bildirməkdən məmnunluq duyuruq. Bizimlə çalışdığınız üçün təşəkkür edirik. Gələcəkdə yenidən sizə xidmət göstərməkdən məmnun olarıq.\r\n\r\nHörmətlə,\r\nMurphy Logistic and shiping";
                 await _emailService.SendEmailAsync(existed.CompanyEmail, "Order request", body);
             }
         }
@@ -136,7 +146,7 @@ namespace LogisticApi.Persistance.Implementations.Services
             existed.Status = OrderStatus.GettingReady;
             _repository.Recovery(existed);
             await _repository.SaveChangesAsync();
-            string body = $"Your order has been successfully confirmed. \r\nTo track your order, use the tracking ID: {existed.TrackingId} \r\nThank you for choosing us.";
+            string body = $"Hörmətli {existed.CompanyName} Komandası,\r\n\r\nSifarişinizin uğurla tesdiqlendiyini bildirməkdən məmnunluq duyuruq.Yükünüzün harda olduğunu bilmek üçün Murphy.az=>Karqom hardadir bölməsine keçid edib bu kodu:{existed.TrackingId} istifade ede bilersiz. Bizimlə çalışdığınız üçün təşəkkür edirik. Gələcəkdə yenidən sizə xidmət göstərməkdən məmnun olarıq.\r\n\r\nHörmətlə,\r\nMurphy Logistic and shiping.";
             await _emailService.SendEmailAsync(existed.CompanyEmail,"Order request",body);
         }
     }

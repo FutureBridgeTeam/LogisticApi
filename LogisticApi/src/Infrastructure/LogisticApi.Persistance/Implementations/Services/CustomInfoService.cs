@@ -28,7 +28,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<CustomInfoItemDto>> GetAllAsync(int page, int take, bool isDeleted)
         {
-            ICollection<CustomInfo> customInfos = await _repository.GetAllWhere(isDeleted: isDeleted, skip: (page - 1) * take, take: take).ToListAsync();
+            ICollection<CustomInfo> customInfos = await _repository.GetAllWhere(isDeleted: isDeleted,
+                skip: (page - 1) * take, take: take).ToListAsync();
             return _mapper.Map<ICollection<CustomInfoItemDto>>(customInfos);
         }
         public async Task<CustomInfoItemDto> GetAsync(int id, bool isDeleted)
@@ -39,7 +40,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task CreateAsync(CustomInfoCreateDto custominfocreateDto)
         {
-            if (await _repository.IsExistAsync(x => x.Tittle == custominfocreateDto.Tittle)) throw new AlreadyExistException();
+            if (await _repository
+                .IsExistAsync(x => x.Tittle == custominfocreateDto.Tittle)) throw new AlreadyExistException();
             custominfocreateDto.Image.ValidateImage();
             CustomInfo custominfo = _mapper.Map<CustomInfo>(custominfocreateDto);
             custominfo.IsDeleted = false;

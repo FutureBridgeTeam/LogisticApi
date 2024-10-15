@@ -1,4 +1,5 @@
-﻿using LogisticApi.Domain.Enums;
+﻿using LogisticApi.Domain.Entities;
+using LogisticApi.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,9 @@ namespace LogisticApi.Application.DTOs.OrderDTOs
         public string LoadName { get; set; } = null!;
         public decimal LoadWeight { get; set; }
         public decimal LoadCapasity { get; set; }
+        public int? ToCountryId { get; set; }
+        public int? FromCountryId { get; set; }
+        public int? ServiceId { get; set; }
+
     }
 }

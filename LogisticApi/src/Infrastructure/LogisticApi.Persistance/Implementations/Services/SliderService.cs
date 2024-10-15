@@ -29,7 +29,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<SliderItemDto>> GetAllAsync(int page, int take, bool isDeleted)
         {
-            ICollection<Slider> sliders = await _repository.GetAllWhere(isDeleted: isDeleted, skip: (page - 1) * take, take: take, orderexpression: x => x.Order).ToListAsync();
+            ICollection<Slider> sliders = await _repository.GetAllWhere(isDeleted: isDeleted
+                , skip: (page - 1) * take, take: take, orderexpression: x => x.Order).ToListAsync();
             return _mapper.Map<ICollection<SliderItemDto>>(sliders);
         }
         public async Task<SliderItemDto> GetAsync(int id, bool isDeleted)
