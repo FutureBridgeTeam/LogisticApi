@@ -30,14 +30,14 @@ namespace LogisticApi.API.Controllers
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Create( FromCountryCreateDto dto)
+        public async Task<IActionResult> Create([FromForm] FromCountryCreateDto dto)
         {
             await _service.CreateAsync(dto);
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPut("{id}")]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Update(int id, FromCountryUpdateDto dto)
+        public async Task<IActionResult> Update([FromForm] FromCountryUpdateDto dto, int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
             await _service.UpdateAsync(dto, id);

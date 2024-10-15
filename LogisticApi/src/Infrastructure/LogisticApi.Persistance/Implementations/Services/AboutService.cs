@@ -29,7 +29,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<AboutItemDto>> GetAllAsync(int page, int take, bool isDeleted)
         {
-            ICollection<About> abouts = await _repository.GetAllWhere(isDeleted: isDeleted, skip: (page - 1) * take, take: take).ToListAsync();
+            ICollection<About> abouts = await _repository.GetAllWhere(isDeleted: isDeleted,
+                skip: (page - 1) * take, take: take).ToListAsync();
             return _mapper.Map<ICollection<AboutItemDto>>(abouts);
         }
         public async Task<AboutItemDto> GetAsync(int id, bool isDeleted)

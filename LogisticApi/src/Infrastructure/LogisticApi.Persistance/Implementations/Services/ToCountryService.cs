@@ -28,7 +28,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<ToCountryItemDto>> GetAllAsync(int page, int take, bool isdeleted)
         {
-            ICollection<ToCountry> toCountries = await _repository.GetAllWhere(skip: (page - 1) * take, take: take, isDeleted: isdeleted).ToListAsync();
+            ICollection<ToCountry> toCountries = await _repository.GetAllWhere(skip: (page - 1) * take
+                , take: take, isDeleted: isdeleted).ToListAsync();
             return _mapper.Map<ICollection<ToCountryItemDto>>(toCountries);
         }
         public async Task<ToCountryItemDto> GetAsync(int id, bool isdeleted)
@@ -39,7 +40,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task Create(ToCountryCreateDto dto)
         {
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper())) throw new AlreadyExistException();
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper())) 
+                throw new AlreadyExistException();
             ToCountry toCountry = _mapper.Map<ToCountry>(dto);
             toCountry.IsDeleted = false;
             toCountry.Name = dto.Name.Capitalize();
@@ -49,7 +51,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         {
             ToCountry existed = await _repository.GetByIdAsync(id, isDeleted: false);
             if (existed == null) throw new NotFoundException();
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper())) throw new AlreadyExistException();
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == dto.Name.ToUpper()))
+                throw new AlreadyExistException();
             existed.Name = dto.Name.Capitalize();
             existed = _mapper.Map(dto, existed);
             await _repository.UpdateAsync(existed);

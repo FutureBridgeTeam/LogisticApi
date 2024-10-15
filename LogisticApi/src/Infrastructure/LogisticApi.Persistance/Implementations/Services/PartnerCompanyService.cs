@@ -29,7 +29,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<PartnerCompanyItemDto>> GetAllAsync(int page, int take,bool isDeleted)
         {
-            ICollection<PartnerCompany> partnerCompanies=await _repository.GetAllWhere(isDeleted: isDeleted, skip: (page - 1) * take, take: take).ToListAsync();
+            ICollection<PartnerCompany> partnerCompanies=await _repository.GetAllWhere(isDeleted: isDeleted
+                , skip: (page - 1) * take, take: take).ToListAsync();
             return _mapper.Map<ICollection<PartnerCompanyItemDto>>(partnerCompanies);
         }
 
@@ -41,7 +42,8 @@ namespace LogisticApi.Persistance.Implementations.Services
 
         public async Task CreateAsync(PartnerCompanyCreateDto partnerdto)
         {
-            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == partnerdto.Name.ToUpper().Trim())) throw new AlreadyExistException();
+            if (await _repository.IsExistAsync(x => x.Name.ToUpper() == partnerdto.Name.ToUpper().Trim()))
+                throw new AlreadyExistException();
             partnerdto.Image.ValidateImage();
             PartnerCompany service = _mapper.Map<PartnerCompany>(partnerdto);
             service.IsDeleted = false;
@@ -56,7 +58,8 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (existed == null) throw new NotFoundException();
             if (existed.Name != partnerdto.Name)
             {
-                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == partnerdto.Name.ToUpper().Trim())) throw new AlreadyExistException();
+                if (await _repository.IsExistAsync(x => x.Name.ToUpper() == partnerdto.Name.ToUpper().Trim()))
+                    throw new AlreadyExistException();
 
             }
             existed = _mapper.Map(partnerdto, existed);

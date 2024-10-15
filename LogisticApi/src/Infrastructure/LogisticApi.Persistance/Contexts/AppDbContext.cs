@@ -25,6 +25,12 @@ namespace LogisticApi.Persistance.Contexts
         public DbSet<About> Abouts { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<Slider> Sliders { get; set; }
+        public DbSet<News> News { get; set; }
+        public DbSet<Office> Office { get; set; }
+        public DbSet<License> License { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<GalleryItem> GalleryItems { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

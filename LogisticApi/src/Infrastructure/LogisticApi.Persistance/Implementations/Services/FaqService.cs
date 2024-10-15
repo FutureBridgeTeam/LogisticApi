@@ -25,7 +25,8 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task<ICollection<FaqItemDto>> GetAllAsync(int page, int take,bool isdeleted)
         {
-            ICollection<Faq> faqs = await _repository.GetAllWhere(isDeleted: isdeleted, skip: (page - 1) * take, take: take).ToListAsync();
+            ICollection<Faq> faqs = await _repository.GetAllWhere(isDeleted: isdeleted,
+                skip: (page - 1) * take, take: take).ToListAsync();
             return _mapper.Map<ICollection<FaqItemDto>>(faqs);
         }
 
@@ -37,8 +38,10 @@ namespace LogisticApi.Persistance.Implementations.Services
         }
         public async Task CreateAsync(FaqCreateDto faqcreatedto)
         {
-            if (await _repository.IsExistAsync(x => x.Question.ToUpper() == faqcreatedto.Question.ToUpper().Trim())) throw new AlreadyExistException();
-            if (await _repository.IsExistAsync(x => x.Answer.ToUpper() == faqcreatedto.Answer.ToUpper().Trim())) throw new AlreadyExistException();
+            if (await _repository.IsExistAsync(x => x.Question.ToUpper() == faqcreatedto.Question.ToUpper().Trim()))
+                throw new AlreadyExistException();
+            if (await _repository.IsExistAsync(x => x.Answer.ToUpper() == faqcreatedto.Answer.ToUpper().Trim()))
+                throw new AlreadyExistException();
             Faq faq = _mapper.Map<Faq>(faqcreatedto);
             faq.IsDeleted = false;
             await _repository.AddAsync(faq);
@@ -51,11 +54,13 @@ namespace LogisticApi.Persistance.Implementations.Services
             if (existed == null) throw new NotFoundException();
             if (faqDto.Question != existed.Question)
             {
-                if (await _repository.IsExistAsync(x => x.Question.ToUpper() == faqDto.Question.ToUpper().Trim())) throw new AlreadyExistException();
+                if (await _repository.IsExistAsync(x => x.Question.ToUpper() == faqDto.Question.ToUpper().Trim()))
+                    throw new AlreadyExistException();
             }
             if (faqDto.Answer != existed.Answer)
             {
-                if (await _repository.IsExistAsync(x => x.Answer.ToUpper() == faqDto.Answer.ToUpper().Trim())) throw new AlreadyExistException();
+                if (await _repository.IsExistAsync(x => x.Answer.ToUpper() == faqDto.Answer.ToUpper().Trim()))
+                    throw new AlreadyExistException();
             }
             await _repository.UpdateAsync(_mapper.Map(faqDto, existed));
         }
